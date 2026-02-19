@@ -59,17 +59,24 @@ if ! command -v helmfile >/dev/null 2>&1; then
   echo "Installing Helmfile..."
 
   # Get latest release tag from GitHub API
-  HELMFILE_LATEST=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest \
-                   | grep "tag_name" \
-                   | head -n 1 \
-                   | awk -F ": " "{print \$2}" \
-                   | tr -d "\",")
-  
-  # Download binary
-  sudo curl -L "https://github.com/helmfile/helmfile/releases/download/${HELMFILE_LATEST}/helmfile_linux_amd64" \
-    -o /usr/local/bin/helmfile
+  HELMFILE_INSTALL_PATH="/usr/local/bin/helmfile"
+  HELMFILE_LATEST="1.2.3"
+  HELMFILE_TAR="helmfile_${HELMFILE_LATEST}_linux_amd64.tar.gz"
 
-  sudo chmod +x /usr/local/bin/helmfile
+  mkdir -p /tmp/helmfile
+  cd /tmp/helmfile
+  
+  pwd
+
+  # Download binary
+  wget "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_LATEST}/helmfile_${HELMFILE_LATEST}_linux_amd64.tar.gz"
+
+  sudo tar -xzf ./$HELMFILE_TAR
+
+  sudo mv ./helmfile ${HELMFILE_INSTALL_PATH}
+  sudo chmod +x ${HELMFILE_INSTALL_PATH}
+
+  rm -rf /tmp/helmfile
 
   # Ensure helm-diff plugin is installed
   if ! helm plugin list | grep -q diff; then
