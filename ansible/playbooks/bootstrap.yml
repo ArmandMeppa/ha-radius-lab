@@ -1,8 +1,0 @@
----
-- name: Bootstrap playbook
-  hosts: all
-  gather_facts: yes
-  tasks:
-    - name: Placeholder task
-      debug:
-        msg: "Bootstrap playbook"
