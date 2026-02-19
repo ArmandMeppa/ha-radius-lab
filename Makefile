@@ -11,7 +11,18 @@ apply:
 bootstrap:
 	./scripts/bootstrap-k3s.sh $(VM_NAME)
 
-up: init apply bootstrap
+deploy-platform:
+	@echo "Mounting project directory if not already mounted..."
+	multipass exec k3s -- bash -c '\
+	if ! mountpoint -q /home/ubuntu/ha-radius-lab; then \
+	  multipass mount . k3s:/home/ubuntu/ha-radius-lab; \
+	else \
+	  echo "/home/ubuntu/ha-radius-lab already mounted"; \
+	fi'
+	multipass exec k3s -- bash -c 'sudo chmod +x  /home/ubuntu/ha-radius-lab/scripts/m3-bootstrap.sh'
+	multipass exec k3s -- bash -c '/home/ubuntu/ha-radius-lab/scripts/m3-bootstrap.sh'
+
+up: init apply bootstrap deploy-platform
 
 logs:
 	@echo "ℹ️  Multipass VM info:"

@@ -6,6 +6,17 @@ VM_NAME=${1:-k3s}
 echo "🔹 Bootstrapping VM: $VM_NAME"
 
 # -------------------------
+# Mount path to VM
+# -------------------------
+# if ! multipass info $VM_NAME | grep -q "Mounts:"; then
+#   echo "Mounting current directory to $VM_NAME..."
+#   multipass mount "$(pwd)" $VM_NAME:/home/ubuntu/ha-radius-lab
+# else
+#   echo "Directory already mounted to $VM_NAME."
+# fi
+
+
+# -------------------------
 # K3s
 # -------------------------
 multipass exec $VM_NAME -- bash -c '
@@ -80,7 +91,10 @@ if ! command -v helmfile >/dev/null 2>&1; then
 
   # Ensure helm-diff plugin is installed
   if ! helm plugin list | grep -q diff; then
+    cd /home/ubuntu || echo "Home directory not found"
     helm plugin install https://github.com/databus23/helm-diff
+  else
+    echo "Helm diff plugin already installed."
   fi
 
 else
