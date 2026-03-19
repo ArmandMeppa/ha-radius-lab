@@ -1,0 +1,23 @@
+## Default values for the umbrella/wrapper OpenLDAP chart.
+## These values are passed through to the upstream `openldap-stack-ha` chart.
+
+persistence:
+  enabled: true
+  size: 2Gi
+
+openldap:
+  adminPassword: "ChangeMe123!"
+  baseDN: "dc=example,dc=org"
+  replication:
+    enabled: false
+
+service:
+  type: ClusterIP
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

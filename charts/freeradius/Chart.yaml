@@ -1,0 +1,6 @@
+apiVersion: v2
+name: freeradius
+description: "FreeRADIUS deployment for ha-radius-lab"
+type: application
+version: 0.1.0
+appVersion: "3.x"

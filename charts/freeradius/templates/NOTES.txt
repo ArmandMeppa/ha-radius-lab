@@ -1,0 +1,9 @@
+FreeRADIUS has been deployed.
+
+To check status:
+
+  kubectl -n radius get pods,svc
+
+To test authentication (from a pod with radtest available):
+
+  radtest user password $(kubectl -n radius get svc {{ include "freeradius.fullname" . }} -o jsonpath='{.spec.clusterIP}') 1812 testing123

@@ -63,43 +63,15 @@ fi
 '
 
 # -------------------------
-# Helmfile (idempotent installation)
+# Helm repo for OpenLDAP
 # -------------------------
 multipass exec $VM_NAME -- bash -c '
-if ! command -v helmfile >/dev/null 2>&1; then
-  echo "Installing Helmfile..."
-
-  # Get latest release tag from GitHub API
-  HELMFILE_INSTALL_PATH="/usr/local/bin/helmfile"
-  HELMFILE_LATEST="1.2.3"
-  HELMFILE_TAR="helmfile_${HELMFILE_LATEST}_linux_amd64.tar.gz"
-
-  mkdir -p /tmp/helmfile
-  cd /tmp/helmfile
-  
-  pwd
-
-  # Download binary
-  wget "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_LATEST}/helmfile_${HELMFILE_LATEST}_linux_amd64.tar.gz"
-
-  sudo tar -xzf ./$HELMFILE_TAR
-
-  sudo mv ./helmfile ${HELMFILE_INSTALL_PATH}
-  sudo chmod +x ${HELMFILE_INSTALL_PATH}
-
-  rm -rf /tmp/helmfile
-
-  # Ensure helm-diff plugin is installed
-  if ! helm plugin list | grep -q diff; then
-    cd /home/ubuntu || echo "Home directory not found"
-    helm plugin install https://github.com/databus23/helm-diff
-  else
-    echo "Helm diff plugin already installed."
-  fi
-
+if ! helm repo list | grep -q helm-openldap; then
+  echo "Adding helm repo helm-openldap..."
+  helm repo add helm-openldap https://jp-gouin.github.io/helm-openldap/ || true
 else
-  echo "Helmfile already installed."
+  echo "helm-openldap repo already present."
 fi
+helm repo update
 '
-
 echo "✅ Bootstrap complete for $VM_NAME"

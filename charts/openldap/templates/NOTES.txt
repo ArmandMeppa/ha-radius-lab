@@ -1,0 +1,7 @@
+1. Get the application URL by running these commands:
+
+  NOTE: This chart is a wrapper that depends on the upstream `openldap-stack-ha` chart.
+
+  To see installed resources run:
+
+    kubectl -n ldap get pods,svc

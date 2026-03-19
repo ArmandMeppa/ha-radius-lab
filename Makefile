@@ -30,3 +30,5 @@ logs:
 
 destroy:
 	cd terraform && terraform destroy -auto-approve || true
+	@multipass delete $(VM_NAME) || true
+	@multipass purge || true

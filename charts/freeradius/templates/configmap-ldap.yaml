@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "freeradius.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "freeradius.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  mods-available-ldap: |
+    ldap {
+      server = "{{ .Values.ldap.host }}"
+      port = {{ .Values.ldap.port }}
+      identity = "{{ .Values.ldap.bindDN }}"
+      password = "{{ .Values.ldap.password }}"
+      base_dn = "{{ .Values.ldap.baseDN }}"
+      # search filter for users
+      filter = "(uid=%{User-Name})"
+      start_tls = no
+      tls_require_cert = 'never'
+      # map LDAP attributes to RADIUS
+      groupname_attribute = "cn"
+      groupmembership_filter = "(memberUid=%{User-Name})"
+    }

@@ -1,0 +1,27 @@
+# Default values for FreeRADIUS
+replicaCount: 1
+
+image:
+  repository: freeradius/freeradius-server
+  tag: 3.0.21
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports:
+    auth: 1812
+    acct: 1813
+
+resources: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+ldap:
+  host: openldap.ldap.svc.cluster.local
+  port: 389
+  baseDN: dc=example,dc=org
+  bindDN: cn=admin,dc=example,dc=org
+  password: ChangeMe123!
+

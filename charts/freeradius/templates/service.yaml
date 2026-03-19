@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "freeradius.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeradius.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app.kubernetes.io/name: {{ include "freeradius.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: auth
+      port: {{ .Values.service.ports.auth }}
+      targetPort: {{ .Values.service.ports.auth }}
+      protocol: UDP
+    - name: acct
+      port: {{ .Values.service.ports.acct }}
+      targetPort: {{ .Values.service.ports.acct }}
+      protocol: UDP
